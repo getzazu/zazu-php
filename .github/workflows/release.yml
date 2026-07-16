@@ -1,0 +1,47 @@
+name: Release
+
+# Tag-driven release. Packagist has no OIDC trusted publishing — it syncs
+# from GitHub automatically once the package is submitted on packagist.org
+# (one-time, no secrets in this repo). So "publishing" is: green tests + a
+# version tag + a GitHub release; Packagist picks the tag up via its
+# GitHub integration.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+      - name: Fetch cassettes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: scripts/fetch-cassettes.sh
+      - run: composer validate --strict
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpunit
+
+  github-release:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          gh release create "$tag" --title "$tag" \
+            --notes "See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/main/CHANGELOG.md)."

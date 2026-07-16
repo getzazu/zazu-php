@@ -1,0 +1,33 @@
+{
+    "name": "getzazu/zazu-php",
+    "description": "PHP SDK for the Zazu API",
+    "license": "MIT",
+    "type": "library",
+    "keywords": ["zazu", "api", "sdk", "banking"],
+    "homepage": "https://github.com/getzazu/zazu-php",
+    "require": {
+        "php": ">=8.2",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "symfony/yaml": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zazu\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Zazu\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

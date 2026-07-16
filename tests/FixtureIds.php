@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Zazu\Tests;
+
+/**
+ * Mirror of spec/support/fixture_ids.rb in zazu-ruby. The placeholders
+ * must exactly match what VCR scrubbed the real staging UUIDs to when
+ * the cassettes were recorded — otherwise the request URI won't match.
+ */
+final class FixtureIds
+{
+    private const MAP = [
+        'ZAZU_FIXTURE_ACCOUNT_ID' => 'fixture-account-id',
+        'ZAZU_FIXTURE_TRANSACTION_ID' => 'fixture-transaction-id',
+        'ZAZU_FIXTURE_CUSTOMER_ID' => 'fixture-customer-id',
+        'ZAZU_FIXTURE_DELETABLE_CUSTOMER_ID' => 'fixture-deletable-customer-id',
+        'ZAZU_FIXTURE_INVOICE_ID' => 'fixture-invoice-id',
+        'ZAZU_FIXTURE_DELETABLE_INVOICE_ID' => 'fixture-deletable-invoice-id',
+        'ZAZU_FIXTURE_PAYMENT_LINK_ID' => 'fixture-payment-link-id',
+        'ZAZU_FIXTURE_CANCELLABLE_PAYMENT_LINK_ID' => 'fixture-cancellable-payment-link-id',
+        'ZAZU_FIXTURE_WEBHOOK_ID' => 'fixture-webhook-id',
+        'ZAZU_FIXTURE_ENABLED_WEBHOOK_ID' => 'fixture-enabled-webhook-id',
+        'ZAZU_FIXTURE_DISABLED_WEBHOOK_ID' => 'fixture-disabled-webhook-id',
+        'ZAZU_FIXTURE_DELETABLE_WEBHOOK_ID' => 'fixture-deletable-webhook-id',
+        'ZAZU_FIXTURE_CHECKOUT_SESSION_ID' => 'fixture-checkout-session-id',
+        'ZAZU_FIXTURE_BENEFICIARY_ID' => 'fixture-beneficiary-id',
+        'ZAZU_FIXTURE_TRANSFER_DRAFT_ID' => 'fixture-transfer-draft-id',
+    ];
+
+    public static function id(string $envVar): string
+    {
+        if (!isset(self::MAP[$envVar])) {
+            throw new \RuntimeException("unknown fixture env var \"{$envVar}\" — add it to FixtureIds::MAP");
+        }
+
+        return self::MAP[$envVar];
+    }
+}
